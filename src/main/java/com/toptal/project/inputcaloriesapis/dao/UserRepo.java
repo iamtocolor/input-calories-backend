@@ -4,8 +4,12 @@ import com.toptal.project.inputcaloriesapis.entity.UserEntity;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.UUID;
+
 @Repository
 public interface UserRepo extends PagingAndSortingRepository<UserEntity, Long> {
 
     public UserEntity findByEmail(String email);
+
+    public UserEntity findByUserId(UUID uuid);
 }

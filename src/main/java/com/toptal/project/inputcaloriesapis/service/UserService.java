@@ -32,4 +32,25 @@ public class UserService {
 
         return userTransformer.transformEntityToDto(createdEntity);
     }
+
+    public UserResponse getUserById(String userId) {
+        return userTransformer.transformEntityToDto(userValidator.getValidatedUserById(userId));
+    }
+
+    public UserResponse updateUser(String userId, UserRequest userRequest) {
+        UserEntity fetchUserData = userValidator.getValidatedUserById(userId);
+        userValidator.validateUserUpdateRequest(userRequest);
+
+        // If we support update of Email
+        // fetchUserData.setEmail(userRequest.getEmail());
+        fetchUserData.setDailyLimit(userRequest.getDailyLimit());
+        fetchUserData.setPassWord(userRequest.getPassWord());
+
+        UserEntity updatedUserData = userRepo.save(fetchUserData);
+        return userTransformer.transformEntityToDto(updatedUserData);
+    }
+
+    public void deleteUser(String userId) {
+        userRepo.delete(userValidator.getValidatedUserById(userId));
+    }
 }

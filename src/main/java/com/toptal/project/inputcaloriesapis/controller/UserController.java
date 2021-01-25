@@ -1,5 +1,6 @@
 package com.toptal.project.inputcaloriesapis.controller;
 
+import com.toptal.project.inputcaloriesapis.dto.FoodDto;
 import com.toptal.project.inputcaloriesapis.dto.request.UserRequest;
 import com.toptal.project.inputcaloriesapis.dto.response.UserResponse;
 import com.toptal.project.inputcaloriesapis.exception.InputCalorieException;
@@ -10,8 +11,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/v1")
+@RequestMapping("/v1/user")
 @Controller
 public class UserController {
 
@@ -23,23 +26,51 @@ public class UserController {
         return "Satish Chandra Gupta";
     }
 
-    @PostMapping("user")
+    @PostMapping("")
     public UserResponse createUser(@RequestBody UserRequest request) throws InputCalorieException {
         return userService.createUser(request);
     }
 
-    @GetMapping("user/{id}")
+    @GetMapping("/{id}")
     public UserResponse getUser(@PathVariable("id") String userId) throws InputCalorieException {
         return userService.getUserById(userId);
     }
 
-    @PutMapping("user/{id}")
+    @PutMapping("/{id}")
     public UserResponse updateUser(@PathVariable("id") String userId, @RequestBody UserRequest userRequest) throws InputCalorieException {
         return userService.updateUser(userId, userRequest);
     }
 
-    @DeleteMapping("user/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable("id") String userId) throws InputCalorieException {
+        userService.deleteUser(userId);
         return new ResponseEntity<String>("Successfully Deleted", HttpStatus.ACCEPTED);
+    }
+
+    //List ALL users API
+
+    // STARTING OF FOOD
+
+
+    @PostMapping("/{id}/food")
+    public FoodDto addFoodForUser(@PathVariable("id") String userId, @RequestBody FoodDto foodDto) throws InputCalorieException {
+        return userService.addFoodForUser(userId, foodDto);
+    }
+
+    // Support for Paging & Filter
+    @GetMapping("/{id}/food")
+    public List<FoodDto> getAllFoodForUser(@PathVariable("id") String userId) throws InputCalorieException {
+        return userService.getAllFoodForUser(userId);
+    }
+
+    @PutMapping("/{id}/food/{foodId}")
+    public FoodDto updateFoodForUser(@PathVariable("id") String userId, @PathVariable("foodId") String foodId, @RequestBody FoodDto foodDto) throws InputCalorieException {
+        return userService.updateFoodForUser(userId, foodId, foodDto);
+    }
+
+    @DeleteMapping("{id}/food/{foodId}")
+    public ResponseEntity<String> deleteFoodForUser(@PathVariable("id") String userId, @PathVariable("foodId") String foodId) throws InputCalorieException {
+        userService.deleteFoodForUser(userId, foodId);
+        return new ResponseEntity<String>(String.format("Successfully Deleted for Food Id: %s", foodId), HttpStatus.ACCEPTED);
     }
 }

@@ -1,11 +1,9 @@
 package com.toptal.project.inputcaloriesapis.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -14,6 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "user")
+@Getter
 public class UserEntity {
 
     @Id
@@ -31,5 +30,10 @@ public class UserEntity {
 
     @Column(name = "daily_limit", nullable = false)
     private Integer dailyLimit;
+
+    @Column(name = "foods")
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<FoodEntity> foodEntities;
+
 
 }

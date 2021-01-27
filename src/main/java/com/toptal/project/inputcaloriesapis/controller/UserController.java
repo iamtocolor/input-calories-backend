@@ -2,6 +2,7 @@ package com.toptal.project.inputcaloriesapis.controller;
 
 import com.toptal.project.inputcaloriesapis.dto.FoodDto;
 import com.toptal.project.inputcaloriesapis.dto.request.UserRequest;
+import com.toptal.project.inputcaloriesapis.dto.response.PagedResponse;
 import com.toptal.project.inputcaloriesapis.dto.response.UserResponse;
 import com.toptal.project.inputcaloriesapis.exception.InputCalorieException;
 import com.toptal.project.inputcaloriesapis.service.UserService;
@@ -31,6 +32,14 @@ public class UserController {
         return userService.createUser(request);
     }
 
+    @GetMapping("")
+    private PagedResponse<UserResponse> getAllUsers(
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "10") Integer size
+    ) throws InputCalorieException {
+        return userService.getAllUsers(page, size);
+    }
+
     @GetMapping("/{id}")
     public UserResponse getUser(@PathVariable("id") String userId) throws InputCalorieException {
         return userService.getUserById(userId);
@@ -47,11 +56,7 @@ public class UserController {
         return new ResponseEntity<String>("Successfully Deleted", HttpStatus.ACCEPTED);
     }
 
-    //List ALL users API
-
     // STARTING OF FOOD
-
-
     @PostMapping("/{id}/food")
     public FoodDto addFoodForUser(@PathVariable("id") String userId, @RequestBody FoodDto foodDto) throws InputCalorieException {
         return userService.addFoodForUser(userId, foodDto);
@@ -59,8 +64,10 @@ public class UserController {
 
     // Support for Paging & Filter
     @GetMapping("/{id}/food")
-    public List<FoodDto> getAllFoodForUser(@PathVariable("id") String userId) throws InputCalorieException {
-        return userService.getAllFoodForUser(userId);
+    public PagedResponse<FoodDto> getAllFoodForUser(@PathVariable("id") String userId,
+                                                    @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                    @RequestParam(value = "size", defaultValue = "10") Integer size) throws InputCalorieException {
+        return userService.getAllFoodForUser(userId, page, size);
     }
 
     @PutMapping("/{id}/food/{foodId}")

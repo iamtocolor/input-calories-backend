@@ -38,4 +38,7 @@ public class FoodEntity {
 
     @Column(name = "within_limit", nullable = false)
     private Boolean withinLimit;
+
+    @Column(name = "user_id", nullable = false)
+    private UUID userId;
 }

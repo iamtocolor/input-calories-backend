@@ -17,5 +17,4 @@ public class InputCaloriesApisApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(InputCaloriesApisApplication.class, args);
 	}
-
 }

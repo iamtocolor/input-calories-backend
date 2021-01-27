@@ -1,8 +1,10 @@
 package com.toptal.project.inputcaloriesapis.service;
 
+import com.toptal.project.inputcaloriesapis.dao.FoodRepo;
 import com.toptal.project.inputcaloriesapis.dao.UserRepo;
 import com.toptal.project.inputcaloriesapis.dto.FoodDto;
 import com.toptal.project.inputcaloriesapis.dto.request.UserRequest;
+import com.toptal.project.inputcaloriesapis.dto.response.PagedResponse;
 import com.toptal.project.inputcaloriesapis.dto.response.UserResponse;
 import com.toptal.project.inputcaloriesapis.entity.FoodEntity;
 import com.toptal.project.inputcaloriesapis.entity.UserEntity;
@@ -11,17 +13,25 @@ import com.toptal.project.inputcaloriesapis.transformer.UserTransformer;
 import com.toptal.project.inputcaloriesapis.util.UserFoodUtils;
 import com.toptal.project.inputcaloriesapis.validator.FoodValidator;
 import com.toptal.project.inputcaloriesapis.validator.UserValidator;
+import org.hibernate.hql.internal.ast.tree.BinaryLogicOperatorNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserService {
 
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private FoodRepo foodRepo;
 
     @Autowired
     private UserTransformer userTransformer;
@@ -43,6 +53,16 @@ public class UserService {
         UserEntity createdEntity = userRepo.save(toCreateEntity);
 
         return userTransformer.transformEntityToDto(createdEntity);
+    }
+
+    public PagedResponse<UserResponse> getAllUsers(Integer page, Integer size) {
+        List<UserResponse> allUsersDto = new ArrayList<>();
+        Page<UserEntity> allUsersEntity = userRepo.findAll(PageRequest.of(page, size));
+
+        for (UserEntity userEntity : allUsersEntity) {
+            allUsersDto.add(userTransformer.transformEntityToDto(userEntity));
+        }
+        return new PagedResponse<UserResponse>(allUsersEntity.getTotalPages(), allUsersEntity.getTotalElements(), page, size, allUsersDto);
     }
 
     public UserResponse getUserById(String userId) {
@@ -72,6 +92,7 @@ public class UserService {
         if (userEntity.getFoodEntities() == null) userEntity.setFoodEntities(new ArrayList<>());
 
         FoodEntity toSave = foodTransformer.transformDtoToEntity(foodDto);
+        toSave.setUserId(UUID.fromString(userId));
 
         userEntity.getFoodEntities().add(toSave);
 
@@ -88,9 +109,17 @@ public class UserService {
         return foodTransformer.transformEntityToDto(toSave);
     }
 
-    public List<FoodDto> getAllFoodForUser(String userId) {
+    public PagedResponse<FoodDto> getAllFoodForUser(String userId, Integer page, Integer size) {
         UserEntity userEntity = userValidator.getValidatedUserById(userId);
-        return foodTransformer.transformEntityToDto(userEntity.getFoodEntities());
+
+        Page<FoodEntity> response = foodRepo.findAllByUserId(UUID.fromString(userId), PageRequest.of(page, size));
+        return new PagedResponse<FoodDto>(
+                response.getTotalPages(),
+                response.getTotalElements(),
+                page,
+                size,
+                foodTransformer.transformEntityToDto(response.getContent())
+        );
     }
 
     public FoodDto updateFoodForUser(String userId, String foodId, FoodDto foodDto) {

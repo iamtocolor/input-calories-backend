@@ -14,7 +14,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "food")
+@Table(name = "food_table")
 public class FoodEntity {
 
     @Id
@@ -30,7 +30,7 @@ public class FoodEntity {
     @Column(name = "time", nullable = false)
     private String time;
 
-    @Column(name = "food", nullable = false)
+    @Column(name = "food_name", nullable = false)
     private String food;
 
     @Column(name = "calorie", nullable = false)

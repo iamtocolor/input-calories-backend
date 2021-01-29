@@ -1,9 +1,12 @@
 package com.toptal.project.inputcaloriesapis.controller;
 
 import com.toptal.project.inputcaloriesapis.dto.FoodDto;
+import com.toptal.project.inputcaloriesapis.dto.request.SearchRequest;
 import com.toptal.project.inputcaloriesapis.dto.request.UserRequest;
 import com.toptal.project.inputcaloriesapis.dto.response.PagedResponse;
 import com.toptal.project.inputcaloriesapis.dto.response.UserResponse;
+import com.toptal.project.inputcaloriesapis.entity.FoodEntity;
+import com.toptal.project.inputcaloriesapis.entity.UserEntity;
 import com.toptal.project.inputcaloriesapis.exception.InputCalorieException;
 import com.toptal.project.inputcaloriesapis.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,5 +82,12 @@ public class UserController {
     public ResponseEntity<String> deleteFoodForUser(@PathVariable("id") String userId, @PathVariable("foodId") String foodId) throws InputCalorieException {
         userService.deleteFoodForUser(userId, foodId);
         return new ResponseEntity<String>(String.format("Successfully Deleted for Food Id: %s", foodId), HttpStatus.ACCEPTED);
+    }
+
+
+    // Beast Search API
+    @PostMapping("/search")
+    public List<FoodEntity> search(@RequestBody SearchRequest searchRequest) throws InputCalorieException {
+        return userService.searchUserDate(searchRequest);
     }
 }

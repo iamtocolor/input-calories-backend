@@ -31,9 +31,6 @@ public class UserEntity {
     @Column(name = "daily_limit", nullable = false)
     private Integer dailyLimit;
 
-    @Column(name = "foods")
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<FoodEntity> foodEntities;
-
-
 }

@@ -3,24 +3,26 @@ package com.toptal.project.inputcaloriesapis.service;
 import com.toptal.project.inputcaloriesapis.dao.FoodRepo;
 import com.toptal.project.inputcaloriesapis.dao.UserRepo;
 import com.toptal.project.inputcaloriesapis.dto.FoodDto;
+import com.toptal.project.inputcaloriesapis.dto.request.SearchRequest;
 import com.toptal.project.inputcaloriesapis.dto.request.UserRequest;
 import com.toptal.project.inputcaloriesapis.dto.response.PagedResponse;
 import com.toptal.project.inputcaloriesapis.dto.response.UserResponse;
 import com.toptal.project.inputcaloriesapis.entity.FoodEntity;
 import com.toptal.project.inputcaloriesapis.entity.UserEntity;
+import com.toptal.project.inputcaloriesapis.filter.FoodSearchSpecification;
 import com.toptal.project.inputcaloriesapis.transformer.FoodTransformer;
 import com.toptal.project.inputcaloriesapis.transformer.UserTransformer;
+import com.toptal.project.inputcaloriesapis.util.TypeConverterRegistry;
 import com.toptal.project.inputcaloriesapis.util.UserFoodUtils;
 import com.toptal.project.inputcaloriesapis.validator.FoodValidator;
 import com.toptal.project.inputcaloriesapis.validator.UserValidator;
-import org.hibernate.hql.internal.ast.tree.BinaryLogicOperatorNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,6 +46,9 @@ public class UserService {
 
     @Autowired
     private FoodValidator foodValidator;
+
+    @Autowired
+    private TypeConverterRegistry typeConverterRegistry;
 
     public UserResponse createUser(UserRequest userRequest) {
         userValidator.validateUserCreateRequest(userRequest);
@@ -161,5 +166,14 @@ public class UserService {
         }
 
         userRepo.save(validatedUserById);
+    }
+
+
+
+
+    //SEARCH
+
+    public List<FoodEntity> searchUserDate(SearchRequest searchRequest) {
+        return foodRepo.findAll(new FoodSearchSpecification(searchRequest, typeConverterRegistry));
     }
 }

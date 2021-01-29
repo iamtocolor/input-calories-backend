@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface UserRepo extends PagingAndSortingRepository<UserEntity, Long> {
+public interface UserRepo extends PagingAndSortingRepository<UserEntity, Long>, JpaSpecificationExecutor<UserEntity> {
 
     public UserEntity findByEmail(String email);
 

@@ -19,6 +19,7 @@ import com.toptal.project.inputcaloriesapis.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -173,7 +174,16 @@ public class UserService {
 
     //SEARCH
 
-    public List<FoodEntity> searchUserDate(SearchRequest searchRequest) {
-        return foodRepo.findAll(new FoodSearchSpecification(searchRequest, typeConverterRegistry));
+    public PagedResponse<FoodDto> searchUserDate(SearchRequest searchRequest, Integer page, Integer size) {
+        Page<FoodEntity> filteredFoods = foodRepo.findAll(new FoodSearchSpecification(searchRequest, typeConverterRegistry), PageRequest.of(page, size));
+
+        List<FoodDto> filterDtoList = foodTransformer.transformEntityToDto(filteredFoods.getContent());
+        return PagedResponse.<FoodDto>builder()
+                .data(filterDtoList)
+                .pageNo(filteredFoods.getNumber())
+                .pageSize(size)
+                .totalCount(filteredFoods.getTotalElements())
+                .totalPages(filteredFoods.getTotalPages())
+                .build();
     }
 }

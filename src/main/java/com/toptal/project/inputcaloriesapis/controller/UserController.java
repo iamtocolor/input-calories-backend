@@ -87,7 +87,9 @@ public class UserController {
 
     // Beast Search API
     @PostMapping("/search")
-    public List<FoodEntity> search(@RequestBody SearchRequest searchRequest) throws InputCalorieException {
-        return userService.searchUserDate(searchRequest);
+    public PagedResponse<FoodDto> search(@RequestBody SearchRequest searchRequest,
+                                   @RequestParam(value = "page", defaultValue = "0") Integer page,
+                                   @RequestParam(value = "size", defaultValue = "10") Integer size) throws InputCalorieException {
+        return userService.searchUserDate(searchRequest, page, size);
     }
 }

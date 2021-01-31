@@ -28,7 +28,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         ex.getErrorMessages().stream().forEach(new Consumer<ICErrorMessage>() {
             @Override
             public void accept(ICErrorMessage e) {
-                apiErrors.add(new APIError(e.getCode(), e.getMessage() + ", parameters : " + parameters));
+                String parameterMessage = "";
+                if (!parameters.isEmpty()) {
+                    parameterMessage = ", parameters : " + parameters;
+                }
+                apiErrors.add(new APIError(e.getCode(), e.getMessage() + parameterMessage));
             }
         });
 

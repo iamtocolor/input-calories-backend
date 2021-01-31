@@ -46,6 +46,17 @@ public class UserValidator {
         return fetchUserData;
     }
 
+    public UserEntity getValidatedUserByEmailId(String emailId) {
+
+        UserEntity fetchUserData = userRepo.findByEmail(emailId);
+        if (fetchUserData == null) {
+            throw new InputCalorieException(HttpStatus.BAD_REQUEST,
+                    Collections.singletonList(ICErrorMessage.USER_NOT_FOUND),
+                    Collections.singletonList(emailId));
+        }
+        return fetchUserData;
+    }
+
     public void validateUserUpdateRequest(UserRequest userRequest) {
         // If we support update of Email
         // validateUserCreateRequest(userRequest);

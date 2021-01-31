@@ -3,14 +3,18 @@ package com.toptal.project.inputcaloriesapis.service;
 import com.toptal.project.inputcaloriesapis.dao.FoodRepo;
 import com.toptal.project.inputcaloriesapis.dao.UserRepo;
 import com.toptal.project.inputcaloriesapis.dto.FoodDto;
+import com.toptal.project.inputcaloriesapis.dto.request.RbacRole;
 import com.toptal.project.inputcaloriesapis.dto.request.SearchRequest;
 import com.toptal.project.inputcaloriesapis.dto.request.UserRequest;
 import com.toptal.project.inputcaloriesapis.dto.response.PagedResponse;
 import com.toptal.project.inputcaloriesapis.dto.response.UserResponse;
 import com.toptal.project.inputcaloriesapis.entity.FoodEntity;
+import com.toptal.project.inputcaloriesapis.entity.RbacRoleEntity;
 import com.toptal.project.inputcaloriesapis.entity.UserEntity;
 import com.toptal.project.inputcaloriesapis.filter.FoodSearchSpecification;
+import com.toptal.project.inputcaloriesapis.rbac.Roles;
 import com.toptal.project.inputcaloriesapis.transformer.FoodTransformer;
+import com.toptal.project.inputcaloriesapis.transformer.RbacRoleTransformer;
 import com.toptal.project.inputcaloriesapis.transformer.UserTransformer;
 import com.toptal.project.inputcaloriesapis.util.TypeConverterRegistry;
 import com.toptal.project.inputcaloriesapis.util.UserFoodUtils;
@@ -22,10 +26,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -43,6 +44,9 @@ public class UserService {
     private FoodTransformer foodTransformer;
 
     @Autowired
+    private RbacRoleTransformer rbacRoleTransformer;
+
+    @Autowired
     private UserValidator userValidator;
 
     @Autowired
@@ -53,7 +57,7 @@ public class UserService {
 
     public UserResponse createUser(UserRequest userRequest) {
         userValidator.validateUserCreateRequest(userRequest);
-
+        userRequest.setRbacRoleList(new HashSet<>());
         UserEntity toCreateEntity = userTransformer.transformDtoToEntity(userRequest);
 
         UserEntity createdEntity = userRepo.save(toCreateEntity);
@@ -186,4 +190,40 @@ public class UserService {
                 .totalPages(filteredFoods.getTotalPages())
                 .build();
     }
+
+
+    //RBAC
+
+    public UserResponse createAdminUser(UserRequest userRequest) {
+        userValidator.validateUserCreateRequest(userRequest);
+
+        userRequest.setRbacRoleList(Collections.singleton(
+                RbacRole.builder()
+                        .role(Roles.ADMIN)
+                        .scopeId(null)
+                        .build()
+        ));
+
+        UserEntity toCreateEntity = userTransformer.transformDtoToEntity(userRequest);
+
+        UserEntity createdEntity = userRepo.save(toCreateEntity);
+
+        return userTransformer.transformEntityToDto(createdEntity);
+    }
+
+    // ASSIGNING ROLES
+    public UserResponse assignRolesToUser(String userId, Set<RbacRole> rbacRoles) {
+        UserEntity userEntity = userValidator.getValidatedUserById(userId);
+
+        if (userEntity.getRbacRoleEntities() == null) {
+            userEntity.setRbacRoleEntities(new HashSet<>());
+        }
+        Set<RbacRoleEntity> rbacRoleEntities = rbacRoleTransformer.transformDtoToEntity(rbacRoles);
+
+        userEntity.getRbacRoleEntities().addAll(rbacRoleEntities);
+
+        UserEntity createdEntity = userRepo.save(userEntity);
+        return userTransformer.transformEntityToDto(createdEntity);
+    }
+
 }

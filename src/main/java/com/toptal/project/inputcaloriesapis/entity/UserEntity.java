@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -33,4 +34,7 @@ public class UserEntity {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<FoodEntity> foodEntities;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<RbacRoleEntity> rbacRoleEntities;
 }

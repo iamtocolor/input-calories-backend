@@ -1,5 +1,6 @@
 package com.toptal.project.inputcaloriesapis.util;
 
+import com.toptal.project.inputcaloriesapis.dao.UserRepo;
 import com.toptal.project.inputcaloriesapis.dto.request.RbacRole;
 import com.toptal.project.inputcaloriesapis.entity.RbacRoleEntity;
 import com.toptal.project.inputcaloriesapis.entity.UserEntity;
@@ -14,10 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class RbacUtils {
@@ -30,7 +28,7 @@ public class RbacUtils {
     private JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    private UserService userService;
+    private UserRepo userRepo;
 
     @Autowired
     private UserValidator userValidator;
@@ -121,6 +119,13 @@ public class RbacUtils {
         token = token.split(" ")[1];
         String userId = jwtTokenUtil.getUserIdFromToken(token);
 
-        return userValidator.getValidatedUserById(userId);
+        UserEntity userEntity = userRepo.findByUserId(UUID.fromString(userId));
+        if (userEntity == null) {
+            throw new InputCalorieException(
+                    HttpStatus.BAD_REQUEST,
+                    Collections.singletonList(ICErrorMessage.INVALID_TOKEN)
+            );
+        }
+        return userEntity;
     }
 }

@@ -38,6 +38,9 @@ public class UserService {
     private FoodRepo foodRepo;
 
     @Autowired
+    private NutrionixService nutrionixService;
+
+    @Autowired
     private UserTransformer userTransformer;
 
     @Autowired
@@ -96,7 +99,12 @@ public class UserService {
         userRepo.delete(userValidator.getValidatedUserById(userId));
     }
 
+    // FOOD for User
+
     public FoodDto addFoodForUser(String userId, FoodDto foodDto) {
+        if (foodDto.getCalories() == null) {
+            foodDto.setCalories(nutrionixService.getCaloriesForFood(foodDto.getFood()));
+        }
         UserEntity userEntity = userValidator.getValidatedUserById(userId);
 
         if (userEntity.getFoodEntities() == null) userEntity.setFoodEntities(new ArrayList<>());
@@ -133,6 +141,10 @@ public class UserService {
     }
 
     public FoodDto updateFoodForUser(String userId, String foodId, FoodDto foodDto) {
+        if (foodDto.getCalories() == null) {
+            foodDto.setCalories(nutrionixService.getCaloriesForFood(foodDto.getFood()));
+        }
+
         UserEntity userEntity = userValidator.getValidatedUserById(userId);
 
         FoodEntity fetchedFood = foodValidator.getValidatedFoodIdForUser(userEntity, foodId);

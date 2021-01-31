@@ -11,6 +11,7 @@ import com.toptal.project.inputcaloriesapis.dto.response.UserResponse;
 import com.toptal.project.inputcaloriesapis.entity.FoodEntity;
 import com.toptal.project.inputcaloriesapis.entity.UserEntity;
 import com.toptal.project.inputcaloriesapis.exception.InputCalorieException;
+import com.toptal.project.inputcaloriesapis.service.NutrionixService;
 import com.toptal.project.inputcaloriesapis.service.RbacService;
 import com.toptal.project.inputcaloriesapis.service.UserService;
 import com.toptal.project.inputcaloriesapis.util.JwtTokenUtil;
@@ -34,6 +35,7 @@ public class UserController {
 
     @Autowired
     private RbacService rbacService;
+
 
     @Autowired
     private RbacUtils rbacUtils;

@@ -17,7 +17,8 @@ public enum ICErrorMessage {
 
     //Rbac
     INVALID_ADMIN_CREATION_KEY(3000, "Invalid key for admin creation"),
-    UNAUTHORIZED_ACCESS(3001, "Not have permission to do the action");
+    UNAUTHORIZED_ACCESS(3001, "Not have permission to do the action"),
+    INVALID_TOKEN(3002, "Token is invalid. Try login again");
 
     private int code;
     private String message;

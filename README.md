@@ -12,6 +12,14 @@ With reference to following requirements this project exposes multiple APIs to c
 
 ##
 
+#### Usage guide
+* There is a special API for creating ADMIN user that is protected through a secret.
+* Once the ADMIN is created, the ADMIN create multiple users
+* Using the Assign role API, the ADMIN can assign multiple roles to a User.
+* By calling the login API, one can get their token which they can pass while making API calls.
+
+##
+
 #### Tech Stack
 * Java
 * Spring Boot

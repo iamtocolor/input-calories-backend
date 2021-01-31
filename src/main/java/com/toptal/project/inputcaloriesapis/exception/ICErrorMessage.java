@@ -1,9 +1,5 @@
 package com.toptal.project.inputcaloriesapis.exception;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
 public enum ICErrorMessage {
 
     //USER RELATED

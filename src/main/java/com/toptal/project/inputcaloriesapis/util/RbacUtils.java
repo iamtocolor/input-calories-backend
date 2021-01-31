@@ -1,13 +1,11 @@
 package com.toptal.project.inputcaloriesapis.util;
 
 import com.toptal.project.inputcaloriesapis.dao.UserRepo;
-import com.toptal.project.inputcaloriesapis.dto.request.RbacRole;
 import com.toptal.project.inputcaloriesapis.entity.RbacRoleEntity;
 import com.toptal.project.inputcaloriesapis.entity.UserEntity;
 import com.toptal.project.inputcaloriesapis.exception.ICErrorMessage;
 import com.toptal.project.inputcaloriesapis.exception.InputCalorieException;
 import com.toptal.project.inputcaloriesapis.rbac.Roles;
-import com.toptal.project.inputcaloriesapis.service.UserService;
 import com.toptal.project.inputcaloriesapis.validator.UserValidator;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -24,7 +24,6 @@ import com.toptal.project.inputcaloriesapis.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -196,7 +195,6 @@ public class UserService {
 
 
     //SEARCH
-
     public PagedResponse<FoodDto> searchUserDate(SearchRequest searchRequest, Integer page, Integer size) {
         Page<FoodEntity> filteredFoods = foodRepo.findAll(new FoodSearchSpecification(searchRequest, typeConverterRegistry), PageRequest.of(page, size));
 
@@ -212,7 +210,6 @@ public class UserService {
 
 
     //RBAC
-
     public UserResponse createAdminUser(UserRequest userRequest) {
         userValidator.validateUserCreateRequest(userRequest);
 

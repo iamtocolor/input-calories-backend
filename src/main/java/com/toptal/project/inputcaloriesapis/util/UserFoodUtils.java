@@ -1,11 +1,9 @@
 package com.toptal.project.inputcaloriesapis.util;
 
-import com.toptal.project.inputcaloriesapis.dto.FoodDto;
 import com.toptal.project.inputcaloriesapis.entity.FoodEntity;
 import com.toptal.project.inputcaloriesapis.entity.UserEntity;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class UserFoodUtils {

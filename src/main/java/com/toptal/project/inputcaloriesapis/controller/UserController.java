@@ -8,13 +8,9 @@ import com.toptal.project.inputcaloriesapis.dto.request.UserRequest;
 import com.toptal.project.inputcaloriesapis.dto.response.LoginResponse;
 import com.toptal.project.inputcaloriesapis.dto.response.PagedResponse;
 import com.toptal.project.inputcaloriesapis.dto.response.UserResponse;
-import com.toptal.project.inputcaloriesapis.entity.FoodEntity;
-import com.toptal.project.inputcaloriesapis.entity.UserEntity;
 import com.toptal.project.inputcaloriesapis.exception.InputCalorieException;
-import com.toptal.project.inputcaloriesapis.service.NutrionixService;
 import com.toptal.project.inputcaloriesapis.service.RbacService;
 import com.toptal.project.inputcaloriesapis.service.UserService;
-import com.toptal.project.inputcaloriesapis.util.JwtTokenUtil;
 import com.toptal.project.inputcaloriesapis.util.RbacUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -36,10 +31,10 @@ public class UserController {
     @Autowired
     private RbacService rbacService;
 
-
     @Autowired
     private RbacUtils rbacUtils;
 
+    // Test API. Ignore
     @GetMapping("/getname")
     public String getName(@RequestHeader("Authorization") String token) {
         return "Satish Chandra Gupta" + token;
@@ -81,14 +76,13 @@ public class UserController {
     }
 
 
-    // STARTING OF FOOD
+    // Food for User
     @PostMapping("/{id}/food")
     public FoodDto addFoodForUser(@RequestHeader("Authorization") String token, @PathVariable("id") String userId, @RequestBody FoodDto foodDto) throws InputCalorieException {
         rbacUtils.validateCrudOnUserRecord(token, userId);
         return userService.addFoodForUser(userId, foodDto);
     }
 
-    // Support for Paging & Filter
     @GetMapping("/{id}/food")
     public PagedResponse<FoodDto> getAllFoodForUser(@RequestHeader("Authorization") String token,
                                                     @PathVariable("id") String userId,
@@ -112,7 +106,7 @@ public class UserController {
     }
 
 
-    // Beast Search API
+    // Beast Search API supporing multiple level brackets
     @PostMapping("/search")
     public PagedResponse<FoodDto> search(@RequestHeader("Authorization") String token,
                                          @RequestBody SearchRequest searchRequest,
@@ -123,12 +117,13 @@ public class UserController {
     }
 
 
-    // LOGIN API
+    // Login API
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest loginRequest) throws InputCalorieException {
         return rbacService.login(loginRequest);
     }
 
+    // Special API for Admin creation
     @PostMapping("/admin")
     public UserResponse createAdmin(@RequestHeader("x-admin-key") String adminKey, @RequestBody UserRequest userRequest) throws InputCalorieException {
         rbacUtils.validateForAdminCreation(adminKey);
@@ -136,6 +131,7 @@ public class UserController {
     }
 
 
+    // For Assigning roles given user
     @PutMapping("/{id}/assign-role")
     private UserResponse assignRole(@RequestHeader("Authorization") String token,
                             @PathVariable("id") String userId,

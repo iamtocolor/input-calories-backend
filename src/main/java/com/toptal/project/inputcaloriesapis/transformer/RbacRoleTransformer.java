@@ -1,9 +1,7 @@
 package com.toptal.project.inputcaloriesapis.transformer;
 
 import com.toptal.project.inputcaloriesapis.dto.request.RbacRole;
-import com.toptal.project.inputcaloriesapis.dto.request.UserRequest;
 import com.toptal.project.inputcaloriesapis.entity.RbacRoleEntity;
-import com.toptal.project.inputcaloriesapis.entity.UserEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

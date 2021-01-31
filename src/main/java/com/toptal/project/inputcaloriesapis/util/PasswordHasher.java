@@ -3,8 +3,6 @@ package com.toptal.project.inputcaloriesapis.util;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.SecureRandom;
-
 /**
  * TODO: Add any hashing criteria
  */

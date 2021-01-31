@@ -2,7 +2,6 @@ package com.toptal.project.inputcaloriesapis.validator;
 
 import com.toptal.project.inputcaloriesapis.dao.UserRepo;
 import com.toptal.project.inputcaloriesapis.dto.request.UserRequest;
-import com.toptal.project.inputcaloriesapis.entity.FoodEntity;
 import com.toptal.project.inputcaloriesapis.entity.UserEntity;
 import com.toptal.project.inputcaloriesapis.exception.ICErrorMessage;
 import com.toptal.project.inputcaloriesapis.exception.InputCalorieException;

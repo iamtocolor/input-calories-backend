@@ -1,11 +1,9 @@
 package com.toptal.project.inputcaloriesapis.filter;
 
 import com.toptal.project.inputcaloriesapis.dto.request.ComplexSearchRequest;
-import com.toptal.project.inputcaloriesapis.dto.request.SearchField;
 import com.toptal.project.inputcaloriesapis.dto.request.SearchRequest;
 import com.toptal.project.inputcaloriesapis.dto.request.SimpleSearchRequest;
 import com.toptal.project.inputcaloriesapis.entity.FoodEntity;
-import com.toptal.project.inputcaloriesapis.entity.UserEntity;
 import com.toptal.project.inputcaloriesapis.util.TypeConverterRegistry;
 import org.springframework.data.jpa.domain.Specification;
 

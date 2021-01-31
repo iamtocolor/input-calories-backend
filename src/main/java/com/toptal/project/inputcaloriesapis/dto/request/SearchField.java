@@ -2,9 +2,6 @@ package com.toptal.project.inputcaloriesapis.dto.request;
 
 import lombok.Getter;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public enum SearchField {
 
     DATE("date"),

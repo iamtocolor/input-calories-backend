@@ -16,6 +16,7 @@ import com.toptal.project.inputcaloriesapis.rbac.Roles;
 import com.toptal.project.inputcaloriesapis.transformer.FoodTransformer;
 import com.toptal.project.inputcaloriesapis.transformer.RbacRoleTransformer;
 import com.toptal.project.inputcaloriesapis.transformer.UserTransformer;
+import com.toptal.project.inputcaloriesapis.util.PasswordHasher;
 import com.toptal.project.inputcaloriesapis.util.TypeConverterRegistry;
 import com.toptal.project.inputcaloriesapis.util.UserFoodUtils;
 import com.toptal.project.inputcaloriesapis.validator.FoodValidator;
@@ -41,6 +42,9 @@ public class UserService {
     private NutrionixService nutrionixService;
 
     @Autowired
+    private PasswordHasher passwordHasher;
+
+    @Autowired
     private UserTransformer userTransformer;
 
     @Autowired
@@ -61,6 +65,9 @@ public class UserService {
     public UserResponse createUser(UserRequest userRequest) {
         userValidator.validateUserCreateRequest(userRequest);
         userRequest.setRbacRoleList(new HashSet<>());
+
+        userRequest.setPassWord(passwordHasher.hashPassword(userRequest.getPassWord()));
+
         UserEntity toCreateEntity = userTransformer.transformDtoToEntity(userRequest);
 
         UserEntity createdEntity = userRepo.save(toCreateEntity);
@@ -208,6 +215,8 @@ public class UserService {
 
     public UserResponse createAdminUser(UserRequest userRequest) {
         userValidator.validateUserCreateRequest(userRequest);
+
+        userRequest.setPassWord(passwordHasher.hashPassword(userRequest.getPassWord()));
 
         userRequest.setRbacRoleList(Collections.singleton(
                 RbacRole.builder()

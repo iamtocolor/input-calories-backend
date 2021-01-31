@@ -8,6 +8,7 @@ import com.toptal.project.inputcaloriesapis.exception.InputCalorieException;
 import com.toptal.project.inputcaloriesapis.rbac.Permission;
 import com.toptal.project.inputcaloriesapis.rbac.Roles;
 import com.toptal.project.inputcaloriesapis.util.JwtTokenUtil;
+import com.toptal.project.inputcaloriesapis.util.PasswordHasher;
 import com.toptal.project.inputcaloriesapis.validator.UserValidator;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,8 @@ public class RbacService {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
-
+    @Autowired
+    private PasswordHasher passwordHasher;
 
     @PostConstruct
     public void init() {
@@ -59,7 +61,7 @@ public class RbacService {
         String emailId = loginRequest.getEmailId();
         UserEntity userEntity = userValidator.getValidatedUserByEmailId(emailId);
         String passWord = loginRequest.getPassword();
-        if (userEntity.getPassWord().equals(passWord)) {
+        if (passwordHasher.matchHashedPassword(passWord, userEntity.getPassWord())) {
             String token = jwtTokenUtil.generateToken(userEntity);
             return LoginResponse.builder()
                     .emailId(loginRequest.getEmailId())

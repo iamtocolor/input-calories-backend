@@ -59,6 +59,11 @@
 			<artifactId>guava</artifactId>
 			<version>10.0.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-crypto</artifactId>
+			<version>5.2.2.RELEASE</version>
+		</dependency>
 
 	</dependencies>
 

@@ -14,10 +14,10 @@ public class FoodDto {
 
     private String foodId;
 
-    @JsonProperty("date")
+    @JsonProperty(value = "date", required = true)
     private String date;
 
-    @JsonProperty("time")
+    @JsonProperty(value = "time", required = true)
     private String time;
 
     @JsonProperty(value = "food", required = true)

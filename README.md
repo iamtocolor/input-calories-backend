@@ -17,3 +17,4 @@ With reference to following requirements this project exposes multiple APIs to c
 * Spring Boot
 * H2
 * Guava libraries for Caching
+* [Postman API Collection](https://www.postman.com/collections/300b0dd5d48c9fbef72d)
